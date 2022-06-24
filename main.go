@@ -7,6 +7,7 @@ import (
 	"os/signal"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/joho/godotenv"
 )
 
 var (
@@ -14,11 +15,6 @@ var (
 	BotToken       string
 	RemoveCommands bool = true
 )
-
-func init() {
-	GuildID = os.Getenv("GUILDID")
-	BotToken = os.Getenv("BOTTOKEN")
-}
 
 var s *discordgo.Session
 
@@ -30,6 +26,15 @@ var (
 	commandsHandlers   = commands.CommandHandlers
 	commandList        = commands.Commands
 )
+
+func init() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	GuildID = os.Getenv("GUILDID")
+	BotToken = os.Getenv("BOTTOKEN")
+}
 
 func init() {
 	var err error
