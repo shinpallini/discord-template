@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bot-template/commands"
 	"log"
 	"os"
 	"os/signal"
@@ -11,14 +12,12 @@ import (
 var (
 	GuildID        string
 	BotToken       string
-	AppID          string
 	RemoveCommands bool = true
 )
 
 func init() {
 	GuildID = os.Getenv("GUILDID")
 	BotToken = os.Getenv("BOTTOKEN")
-	AppID = os.Getenv("APPID")
 }
 
 var s *discordgo.Session
@@ -26,9 +25,10 @@ var s *discordgo.Session
 var (
 	// integerOptionMinValue = 1.0
 
-	commands           = []*discordgo.ApplicationCommand{}
+	// commands           = []*discordgo.ApplicationCommand{}
 	componentsHandlers = map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate){}
-	commandsHandlers   = map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate){}
+	commandsHandlers   = commands.CommandHandlers
+	commandList        = commands.Commands
 )
 
 func init() {
@@ -63,8 +63,8 @@ func main() {
 	defer s.Close()
 
 	log.Println("Adding commands...")
-	registeredCommands := make([]*discordgo.ApplicationCommand, len(commands))
-	for i, v := range commands {
+	registeredCommands := make([]*discordgo.ApplicationCommand, len(commandList))
+	for i, v := range commandList {
 		cmd, err := s.ApplicationCommandCreate(s.State.User.ID, GuildID, v)
 		if err != nil {
 			log.Panicf("Cannot create '%v' command: %v", v.Name, err)
