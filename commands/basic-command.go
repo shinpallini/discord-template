@@ -6,9 +6,19 @@ import (
 
 func init() {
 	// Nameで定義された文字列がKeyになるので同時に書ける
+	embed := NewMessageEmbed(
+		SetEmbedType(discordgo.EmbedTypeRich),
+		SetTitle("Embed!"),
+		SetDescription("Description!"),
+		SetColor(0x15e81c),
+	)
+	responseData := NewInteractionResponseData(
+		SetContent("This is a basic-command with ResponseData Option!"),
+		SetEmbed(embed),
+	)
 	response := NewInteractionResponse(
 		SetType(discordgo.InteractionResponseChannelMessageWithSource),
-		SetData("This is a basic command with Option!"),
+		SetData(responseData),
 	)
 	// addCommand(
 	// 	&discordgo.ApplicationCommand{
