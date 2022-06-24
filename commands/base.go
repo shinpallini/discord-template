@@ -40,10 +40,9 @@ func SetContent(content string) InteractionRsponseDataOption {
 	}
 }
 
-func SetEmbed(e *discordgo.MessageEmbed) InteractionRsponseDataOption {
+func SetEmbed(e []*discordgo.MessageEmbed) InteractionRsponseDataOption {
 	return func(rd *discordgo.InteractionResponseData) {
-		rd.Embeds = []*discordgo.MessageEmbed{}
-		rd.Embeds = append(rd.Embeds, e)
+		rd.Embeds = append(rd.Embeds, e...)
 	}
 }
 
@@ -84,6 +83,12 @@ func SetColor(i int) MessageEmbedOption {
 	}
 }
 
+func SetEmbedField(ef []*discordgo.MessageEmbedField) MessageEmbedOption {
+	return func(e *discordgo.MessageEmbed) {
+		e.Fields = append(e.Fields, ef...)
+	}
+}
+
 func NewMessageEmbed(options ...MessageEmbedOption) *discordgo.MessageEmbed {
 	e := &discordgo.MessageEmbed{}
 
@@ -91,6 +96,36 @@ func NewMessageEmbed(options ...MessageEmbedOption) *discordgo.MessageEmbed {
 		opt(e)
 	}
 	return e
+}
+
+// MessageEmbedField構造体の初期化のためのOptionと関数
+type MessageEmbedFieldOption func(ef *discordgo.MessageEmbedField)
+
+func SetEmbedFieldName(s string) MessageEmbedFieldOption {
+	return func(ef *discordgo.MessageEmbedField) {
+		ef.Name = s
+	}
+}
+
+func SetEmbedFieldValue(s string) MessageEmbedFieldOption {
+	return func(ef *discordgo.MessageEmbedField) {
+		ef.Value = s
+	}
+}
+
+func SetEmbedFieldInline(b bool) MessageEmbedFieldOption {
+	return func(ef *discordgo.MessageEmbedField) {
+		ef.Inline = b
+	}
+}
+
+func NewMessageEmbedField(options ...MessageEmbedFieldOption) *discordgo.MessageEmbedField {
+	ef := &discordgo.MessageEmbedField{}
+
+	for _, opt := range options {
+		opt(ef)
+	}
+	return ef
 }
 
 var (

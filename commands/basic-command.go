@@ -6,12 +6,29 @@ import (
 
 func init() {
 	// Nameで定義された文字列がKeyになるので同時に書ける
-	embed := NewMessageEmbed(
-		SetEmbedType(discordgo.EmbedTypeRich),
-		SetTitle("Embed!"),
-		SetDescription("Description!"),
-		SetColor(0x15e81c),
-	)
+	embed := []*discordgo.MessageEmbed{
+		NewMessageEmbed(
+			SetEmbedType(discordgo.EmbedTypeRich),
+			SetTitle("Embed!"),
+			SetDescription("Description!"),
+			SetColor(0x15e81c),
+			SetEmbedField(
+				[]*discordgo.MessageEmbedField{
+					NewMessageEmbedField(
+						SetEmbedFieldName("Embed Field Name"),
+						SetEmbedFieldValue("Embed Field Value"),
+						SetEmbedFieldInline(true),
+					),
+				},
+			),
+		),
+		NewMessageEmbed(
+			SetEmbedType(discordgo.EmbedTypeRich),
+			SetTitle("Embed2!"),
+			SetDescription("Description2!"),
+			SetColor(0x3a6b8d),
+		),
+	}
 	responseData := NewInteractionResponseData(
 		SetContent("This is a basic-command with ResponseData Option!"),
 		SetEmbed(embed),
