@@ -21,8 +21,7 @@ var s *discordgo.Session
 var (
 	// integerOptionMinValue = 1.0
 
-	// commands           = []*discordgo.ApplicationCommand{}
-	componentsHandlers = map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate){}
+	componentsHandlers = commands.ComponentsHandlers
 	commandsHandlers   = commands.CommandHandlers
 	commandList        = commands.Commands
 )
