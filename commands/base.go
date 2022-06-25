@@ -178,6 +178,26 @@ func AddCustomButton(style discordgo.ButtonStyle, label string, customID string)
 	}
 }
 
+func AddSingleSelectMenu(customID string, selectOptions []discordgo.SelectMenuOption) ActionsRowOption {
+	return func(r *discordgo.ActionsRow) {
+		r.Components = append(r.Components, discordgo.SelectMenu{
+			CustomID: customID,
+			Options:  selectOptions,
+		})
+	}
+}
+
+func AddMultiSelectMenu(customID string, selectOptions []discordgo.SelectMenuOption, min_value *int, max_value int) ActionsRowOption {
+	return func(r *discordgo.ActionsRow) {
+		r.Components = append(r.Components, discordgo.SelectMenu{
+			CustomID:  customID,
+			Options:   selectOptions,
+			MinValues: min_value,
+			MaxValues: max_value,
+		})
+	}
+}
+
 func NewActionsRow(options ...ActionsRowOption) *discordgo.ActionsRow {
 	c := &discordgo.ActionsRow{}
 
@@ -185,4 +205,26 @@ func NewActionsRow(options ...ActionsRowOption) *discordgo.ActionsRow {
 		opt(c)
 	}
 	return c
+}
+
+// SelectMenuOption構造体初期化のためのOptionと関数
+
+type SelectMenuOptionOption func(*discordgo.SelectMenuOption)
+
+func AddSelectDescription(d string) SelectMenuOptionOption {
+	return func(o *discordgo.SelectMenuOption) {
+		o.Description = d
+	}
+}
+
+func NewSelectMenuOption(label string, value string, options ...SelectMenuOptionOption) *discordgo.SelectMenuOption {
+	o := &discordgo.SelectMenuOption{
+		Label: label,
+		Value: value,
+	}
+
+	for _, opt := range options {
+		opt(o)
+	}
+	return o
 }
