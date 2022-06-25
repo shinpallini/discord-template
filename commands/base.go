@@ -7,6 +7,27 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+var (
+	Commands           = make([]*discordgo.ApplicationCommand, 0)
+	CommandHandlers    = make(map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate))
+	ComponentsHandlers = make(map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate))
+)
+
+func addCommand(command *discordgo.ApplicationCommand, fn func(s *discordgo.Session, i *discordgo.InteractionCreate)) {
+	_, exist := CommandHandlers[command.Name]
+	if exist {
+		log.Fatal(fmt.Sprintf("[%s] ← このコマンド名が重複しています！", command.Name))
+	}
+	// コマンド部分のNameをそのままmapのKeyとして設定しておく
+	CommandHandlers[command.Name] = fn
+	Commands = append(Commands, command)
+}
+
+func addComponent(customID string, fn func(s *discordgo.Session, i *discordgo.InteractionCreate)) {
+	ComponentsHandlers[customID] = fn
+}
+
+// 以下Option型と構造体生成関数の記述
 // InteractionResponse構造体の初期化のためのOptionと関数
 type InteractionResponseOption func(r *discordgo.InteractionResponse)
 
@@ -164,24 +185,4 @@ func NewActionsRow(options ...ActionsRowOption) *discordgo.ActionsRow {
 		opt(c)
 	}
 	return c
-}
-
-var (
-	Commands           = make([]*discordgo.ApplicationCommand, 0)
-	CommandHandlers    = make(map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate))
-	ComponentsHandlers = make(map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate))
-)
-
-func addCommand(command *discordgo.ApplicationCommand, fn func(s *discordgo.Session, i *discordgo.InteractionCreate)) {
-	_, exist := CommandHandlers[command.Name]
-	if exist {
-		log.Fatal(fmt.Sprintf("[%s] ← このコマンド名が重複しています！", command.Name))
-	}
-	// コマンド部分のNameをそのままmapのKeyとして設定しておく
-	CommandHandlers[command.Name] = fn
-	Commands = append(Commands, command)
-}
-
-func addComponent(customID string, fn func(s *discordgo.Session, i *discordgo.InteractionCreate)) {
-	ComponentsHandlers[customID] = fn
 }
