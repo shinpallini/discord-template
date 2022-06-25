@@ -137,13 +137,12 @@ func NewMessageEmbedField(options ...MessageEmbedFieldOption) *discordgo.Message
 // MessageComponent構造体初期化のためのOptionと関数
 type ActionsRowOption func(*discordgo.ActionsRow)
 
-func AddButton(style discordgo.ButtonStyle, label string) ActionsRowOption {
+func AddLinkButton(label string, url string) ActionsRowOption {
 	return func(r *discordgo.ActionsRow) {
 		r.Components = append(r.Components, discordgo.Button{
-			Style: style,
+			Style: discordgo.LinkButton,
 			Label: label,
-			//CustomID: "test",
-			URL: "https://discord.com/developers/docs/interactions/message-components",
+			URL:   url,
 		})
 	}
 }
