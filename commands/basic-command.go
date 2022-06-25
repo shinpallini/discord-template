@@ -1,12 +1,14 @@
 package commands
 
 import (
+	"log"
+
 	"github.com/bwmarrin/discordgo"
 )
 
 func init() {
 	// Nameで定義された文字列がKeyになるので同時に書ける
-	embed := []*discordgo.MessageEmbed{
+	embeds := []*discordgo.MessageEmbed{
 		NewMessageEmbed(
 			SetEmbedType(discordgo.EmbedTypeRich),
 			SetTitle("Embed!"),
@@ -29,14 +31,19 @@ func init() {
 			SetColor(0x3a6b8d),
 		),
 	}
+	component := []discordgo.MessageComponent{
+		*NewActionsRow(AddButton(5, "Button1")),
+	}
 	responseData := NewInteractionResponseData(
 		SetContent("This is a basic-command with ResponseData Option!"),
-		SetEmbed(embed),
+		SetEmbed(embeds),
+		SetComponent(component),
 	)
 	response := NewInteractionResponse(
 		SetType(discordgo.InteractionResponseChannelMessageWithSource),
 		SetData(responseData),
 	)
+	log.Println(responseData)
 	// addCommand(
 	// 	&discordgo.ApplicationCommand{
 	// 		Name:        "basic-command",

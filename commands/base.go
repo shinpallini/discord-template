@@ -46,6 +46,12 @@ func SetEmbed(e []*discordgo.MessageEmbed) InteractionRsponseDataOption {
 	}
 }
 
+func SetComponent(c []discordgo.MessageComponent) InteractionRsponseDataOption {
+	return func(rd *discordgo.InteractionResponseData) {
+		rd.Components = append(rd.Components, c...)
+	}
+}
+
 func NewInteractionResponseData(options ...InteractionRsponseDataOption) *discordgo.InteractionResponseData {
 	ird := &discordgo.InteractionResponseData{}
 
@@ -126,6 +132,29 @@ func NewMessageEmbedField(options ...MessageEmbedFieldOption) *discordgo.Message
 		opt(ef)
 	}
 	return ef
+}
+
+// MessageComponent構造体初期化のためのOptionと関数
+type ActionsRowOption func(*discordgo.ActionsRow)
+
+func AddButton(style discordgo.ButtonStyle, label string) ActionsRowOption {
+	return func(r *discordgo.ActionsRow) {
+		r.Components = append(r.Components, discordgo.Button{
+			Style: style,
+			Label: label,
+			//CustomID: "test",
+			URL: "https://discord.com/developers/docs/interactions/message-components",
+		})
+	}
+}
+
+func NewActionsRow(options ...ActionsRowOption) *discordgo.ActionsRow {
+	c := &discordgo.ActionsRow{}
+
+	for _, opt := range options {
+		opt(c)
+	}
+	return c
 }
 
 var (
