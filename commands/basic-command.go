@@ -1,9 +1,14 @@
 package commands
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/bwmarrin/discordgo"
+)
+
+var (
+	SelectCustomID = "single-select"
 )
 
 func init() {
@@ -36,6 +41,29 @@ func init() {
 			AddLinkButton("Linked Button", "https://discord.com/developers/docs/interactions/message-components"),
 			AddCustomButton(discordgo.PrimaryButton, "Custom Button", "test"),
 		),
+
+		*NewActionsRow(
+			AddSingleSelectMenu(
+				SelectCustomID,
+				[]discordgo.SelectMenuOption{
+					*NewSelectMenuOption(
+						"Select a",
+						"select_a",
+						AddSelectDescription("Selection A"),
+					),
+					*NewSelectMenuOption(
+						"Select b",
+						"select_b",
+						AddSelectDescription("Selection B"),
+					),
+					*NewSelectMenuOption(
+						"Select c",
+						"select_c",
+						AddSelectDescription("Selection C"),
+					),
+				},
+			),
+		),
 	}
 	responseData := NewInteractionResponseData(
 		SetContent("This is a basic-command with ResponseData Option!"),
@@ -46,7 +74,7 @@ func init() {
 		SetType(discordgo.InteractionResponseChannelMessageWithSource),
 		SetData(responseData),
 	)
-	log.Println(responseData)
+	log.Println(responseData.Components)
 	// addCommand(
 	// 	&discordgo.ApplicationCommand{
 	// 		Name:        "basic-command",
@@ -70,4 +98,13 @@ func init() {
 			s.InteractionRespond(i.Interaction, response)
 		},
 	)
+	addComponent(SelectCustomID, func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		data := i.MessageComponentData().Values[0]
+		s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+			Type: discordgo.InteractionResponseChannelMessageWithSource,
+			Data: &discordgo.InteractionResponseData{
+				Content: fmt.Sprintf("Your selection is %s!.", data),
+			},
+		})
+	})
 }
