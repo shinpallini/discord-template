@@ -147,6 +147,16 @@ func AddLinkButton(label string, url string) ActionsRowOption {
 	}
 }
 
+func AddCustomButton(style discordgo.ButtonStyle, label string, customID string) ActionsRowOption {
+	return func(r *discordgo.ActionsRow) {
+		r.Components = append(r.Components, discordgo.Button{
+			Style:    style,
+			Label:    label,
+			CustomID: customID,
+		})
+	}
+}
+
 func NewActionsRow(options ...ActionsRowOption) *discordgo.ActionsRow {
 	c := &discordgo.ActionsRow{}
 
@@ -157,8 +167,9 @@ func NewActionsRow(options ...ActionsRowOption) *discordgo.ActionsRow {
 }
 
 var (
-	Commands        = make([]*discordgo.ApplicationCommand, 0)
-	CommandHandlers = make(map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate))
+	Commands           = make([]*discordgo.ApplicationCommand, 0)
+	CommandHandlers    = make(map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate))
+	ComponentsHandlers = make(map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate))
 )
 
 func addCommand(command *discordgo.ApplicationCommand, fn func(s *discordgo.Session, i *discordgo.InteractionCreate)) {
@@ -169,4 +180,8 @@ func addCommand(command *discordgo.ApplicationCommand, fn func(s *discordgo.Sess
 	// コマンド部分のNameをそのままmapのKeyとして設定しておく
 	CommandHandlers[command.Name] = fn
 	Commands = append(Commands, command)
+}
+
+func addComponent(customID string, fn func(s *discordgo.Session, i *discordgo.InteractionCreate)) {
+	ComponentsHandlers[customID] = fn
 }

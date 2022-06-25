@@ -32,7 +32,10 @@ func init() {
 		),
 	}
 	component := []discordgo.MessageComponent{
-		*NewActionsRow(AddLinkButton("Button1", "https://discord.com/developers/docs/interactions/message-components")),
+		*NewActionsRow(
+			AddLinkButton("Linked Button", "https://discord.com/developers/docs/interactions/message-components"),
+			AddCustomButton(discordgo.PrimaryButton, "Custom Button", "test"),
+		),
 	}
 	responseData := NewInteractionResponseData(
 		SetContent("This is a basic-command with ResponseData Option!"),
