@@ -36,16 +36,15 @@ func init() {
 			SetColor(0x3a6b8d),
 		),
 	}
-	component := []discordgo.MessageComponent{
+	component := NewAnyTypeList[discordgo.MessageComponent](
 		*NewActionsRow(
 			AddLinkButton("Linked Button", "https://discord.com/developers/docs/interactions/message-components"),
 			AddCustomButton(discordgo.PrimaryButton, "Custom Button", "test"),
 		),
-
 		*NewActionsRow(
 			AddSingleSelectMenu(
 				SelectCustomID,
-				[]discordgo.SelectMenuOption{
+				NewAnyTypeList(
 					*NewSelectMenuOption(
 						"Select a",
 						"select_a",
@@ -61,10 +60,10 @@ func init() {
 						"select_c",
 						AddSelectDescription("Selection C"),
 					),
-				},
+				),
 			),
 		),
-	}
+	)
 	responseData := NewInteractionResponseData(
 		SetContent("This is a basic-command with ResponseData Option!"),
 		SetEmbed(embeds),

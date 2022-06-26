@@ -208,7 +208,6 @@ func NewActionsRow(options ...ActionsRowOption) *discordgo.ActionsRow {
 }
 
 // SelectMenuOption構造体初期化のためのOptionと関数
-
 type SelectMenuOptionOption func(*discordgo.SelectMenuOption)
 
 func AddSelectDescription(d string) SelectMenuOptionOption {
@@ -227,4 +226,14 @@ func NewSelectMenuOption(label string, value string, options ...SelectMenuOption
 		opt(o)
 	}
 	return o
+}
+
+// あらゆる型の変数を引数に取って配列を返すメソッド
+// interfaceの型が必要な場合はインスタンス化するためのかっこの中に型を指定する
+func NewAnyTypeList[T any](t ...T) []T {
+	l := []T{}
+	for _, elem := range t {
+		l = append(l, elem)
+	}
+	return l
 }
