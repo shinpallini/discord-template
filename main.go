@@ -20,8 +20,7 @@ var s *discordgo.Session
 
 var (
 	// integerOptionMinValue = 1.0
-
-	componentsHandlers = commands.ComponentsHandlers
+	componentsHandlers = commands.ComponentHandlers
 	commandsHandlers   = commands.CommandHandlers
 	commandList        = commands.Commands
 )

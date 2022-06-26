@@ -8,9 +8,9 @@ import (
 )
 
 var (
-	Commands           = make([]*discordgo.ApplicationCommand, 0)
-	CommandHandlers    = make(map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate))
-	ComponentsHandlers = make(map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate))
+	Commands          = make([]*discordgo.ApplicationCommand, 0)
+	CommandHandlers   = make(map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate))
+	ComponentHandlers = make(map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate))
 )
 
 func addCommand(command *discordgo.ApplicationCommand, fn func(s *discordgo.Session, i *discordgo.InteractionCreate)) {
@@ -24,7 +24,21 @@ func addCommand(command *discordgo.ApplicationCommand, fn func(s *discordgo.Sess
 }
 
 func addComponent(customID string, fn func(s *discordgo.Session, i *discordgo.InteractionCreate)) {
-	ComponentsHandlers[customID] = fn
+	_, exist := ComponentHandlers[customID]
+	if exist {
+		log.Fatal(fmt.Sprintf("[%s] ← このカスタムIDが重複しています！", customID))
+	}
+	ComponentHandlers[customID] = fn
+}
+
+func addCommandWithComponent(
+	cmd *discordgo.ApplicationCommand,
+	cmdfn func(s *discordgo.Session, i *discordgo.InteractionCreate),
+	customID string,
+	cpnfn func(s *discordgo.Session, i *discordgo.InteractionCreate),
+) {
+	addComponent(customID, cpnfn)
+	addCommand(cmd, cmdfn)
 }
 
 // 以下Option型と構造体生成関数の記述
