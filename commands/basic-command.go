@@ -7,11 +7,8 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-var (
-	SelectCustomID = "single-select"
-)
-
 func init() {
+	customID := "single-select"
 	// Nameで定義された文字列がKeyになるので同時に書ける
 	embeds := []*discordgo.MessageEmbed{
 		NewMessageEmbed(
@@ -43,7 +40,7 @@ func init() {
 		),
 		*NewActionsRow(
 			AddSingleSelectMenu(
-				SelectCustomID,
+				customID,
 				NewAnyTypeList(
 					*NewSelectMenuOption(
 						"Select a",
@@ -88,7 +85,7 @@ func init() {
 	// 		})
 	// 	},
 	// )
-	addCommand(
+	addCommandWithComponent(
 		&discordgo.ApplicationCommand{
 			Name:        "basic-command",
 			Description: "Basic-command",
@@ -96,14 +93,15 @@ func init() {
 		func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			s.InteractionRespond(i.Interaction, response)
 		},
+		customID,
+		func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+			data := i.MessageComponentData().Values[0]
+			s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+				Type: discordgo.InteractionResponseChannelMessageWithSource,
+				Data: &discordgo.InteractionResponseData{
+					Content: fmt.Sprintf("Your selection is %s!.", data),
+				},
+			})
+		},
 	)
-	addComponent(SelectCustomID, func(s *discordgo.Session, i *discordgo.InteractionCreate) {
-		data := i.MessageComponentData().Values[0]
-		s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-			Type: discordgo.InteractionResponseChannelMessageWithSource,
-			Data: &discordgo.InteractionResponseData{
-				Content: fmt.Sprintf("Your selection is %s!.", data),
-			},
-		})
-	})
 }
