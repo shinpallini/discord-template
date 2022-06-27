@@ -20,9 +20,9 @@ var s *discordgo.Session
 
 var (
 	// integerOptionMinValue = 1.0
-	componentsHandlers = commands.ComponentHandlers
-	commandsHandlers   = commands.CommandHandlers
-	commandList        = commands.Commands
+	componentHandlers = commands.ComponentHandlers
+	commandsHandlers  = commands.CommandHandlers
+	commandList       = commands.Commands
 )
 
 func init() {
@@ -54,7 +54,7 @@ func main() {
 				h(s, i)
 			}
 		case discordgo.InteractionMessageComponent:
-			if h, ok := componentsHandlers[i.MessageComponentData().CustomID]; ok {
+			if h, ok := componentHandlers[i.MessageComponentData().CustomID]; ok {
 				h(s, i)
 			}
 		}
