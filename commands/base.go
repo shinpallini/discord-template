@@ -230,6 +230,23 @@ func AddSelectDescription(d string) SelectMenuOptionOption {
 	}
 }
 
+func AddSelectDefaultEmoji(s string) SelectMenuOptionOption {
+	return func(o *discordgo.SelectMenuOption) {
+		o.Emoji = discordgo.ComponentEmoji{
+			Name: s,
+		}
+	}
+}
+
+func AddSelectCustomEmoji(s string, id string) SelectMenuOptionOption {
+	return func(o *discordgo.SelectMenuOption) {
+		o.Emoji = discordgo.ComponentEmoji{
+			Name: s,
+			ID:   id,
+		}
+	}
+}
+
 func NewSelectMenuOption(label string, value string, options ...SelectMenuOptionOption) *discordgo.SelectMenuOption {
 	o := &discordgo.SelectMenuOption{
 		Label: label,
