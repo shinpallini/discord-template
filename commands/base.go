@@ -244,7 +244,7 @@ func NewSelectMenuOption(label string, value string, options ...SelectMenuOption
 
 // あらゆる型の変数を引数に取って配列を返すメソッド
 // interfaceの型が必要な場合はインスタンス化するためのかっこの中に型を指定する
-func NewAnyTypeList[T any](t ...T) []T {
+func NewList[T any](t ...T) []T {
 	l := []T{}
 	for _, elem := range t {
 		l = append(l, elem)
