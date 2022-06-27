@@ -10,20 +10,20 @@ import (
 func init() {
 	customID := "single-select"
 	// Nameで定義された文字列がKeyになるので同時に書ける
-	embeds := []*discordgo.MessageEmbed{
+	embeds := NewList(
 		NewMessageEmbed(
 			SetEmbedType(discordgo.EmbedTypeRich),
 			SetTitle("Embed!"),
 			SetDescription("Description!"),
 			SetColor(0x15e81c),
 			SetEmbedField(
-				[]*discordgo.MessageEmbedField{
+				NewList(
 					NewMessageEmbedField(
 						SetEmbedFieldName("Embed Field Name"),
 						SetEmbedFieldValue("Embed Field Value"),
 						SetEmbedFieldInline(true),
 					),
-				},
+				),
 			),
 		),
 		NewMessageEmbed(
@@ -32,8 +32,8 @@ func init() {
 			SetDescription("Description2!"),
 			SetColor(0x3a6b8d),
 		),
-	}
-	component := NewAnyTypeList[discordgo.MessageComponent](
+	)
+	component := NewList[discordgo.MessageComponent](
 		*NewActionsRow(
 			AddLinkButton("Linked Button", "https://discord.com/developers/docs/interactions/message-components"),
 			AddCustomButton(discordgo.PrimaryButton, "Custom Button", "test"),
@@ -41,7 +41,7 @@ func init() {
 		*NewActionsRow(
 			AddSingleSelectMenu(
 				customID,
-				NewAnyTypeList(
+				NewList(
 					*NewSelectMenuOption(
 						"Select a",
 						"select_a",
@@ -70,7 +70,7 @@ func init() {
 		SetType(discordgo.InteractionResponseChannelMessageWithSource),
 		SetData(responseData),
 	)
-	log.Println(responseData.Components)
+	log.Println(responseData)
 	// addCommand(
 	// 	&discordgo.ApplicationCommand{
 	// 		Name:        "basic-command",
