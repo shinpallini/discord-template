@@ -10,7 +10,7 @@ import (
 func init() {
 	minValues := 1
 	customID := "multi-select"
-	addCommandWithComponent(
+	AddCommandWithComponent(
 		&discordgo.ApplicationCommand{
 			Name:        "select-command",
 			Description: "Select-command with Multi select",

@@ -88,7 +88,7 @@ func init() {
 	// 		})
 	// 	},
 	// )
-	addCommandWithComponent(
+	AddCommandWithComponent(
 		&discordgo.ApplicationCommand{
 			Name:        "basic-command",
 			Description: "Basic-command",
