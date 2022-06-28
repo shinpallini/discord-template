@@ -20,9 +20,9 @@ var s *discordgo.Session
 
 var (
 	// integerOptionMinValue = 1.0
-	componentHandlers = commands.ComponentHandlers
-	commandsHandlers  = commands.CommandHandlers
-	commandList       = commands.Commands
+	componentHandlers = commands.DefaultSettings.ComponentHandlers
+	commandsHandlers  = commands.DefaultSettings.CommandHandlers
+	commandList       = commands.DefaultSettings.Commands
 )
 
 func init() {
